@@ -2,6 +2,8 @@
 
 [![ci](https://github.com/Drakeion2532/soc-detection-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Drakeion2532/soc-detection-lab/actions/workflows/ci.yml)
 
+Case study: [shubhanpunde.vercel.app/projects/soc-detection-lab](https://shubhanpunde.vercel.app/projects/soc-detection-lab/)
+
 A home SOC lab for practising the full alert lifecycle on a real Windows endpoint:
 **simulate an attack technique → detect it → investigate → write the incident report.**
 
