@@ -1,0 +1,6 @@
+EventID=1 (Image IN ("*\\whoami.exe", "*\\systeminfo.exe", "*\\hostname.exe", "*\\ipconfig.exe", "*\\net.exe", "*\\quser.exe"))
+
+| bin _time span=5m
+| stats dc(Image) as value_count by _time ParentProcessId
+
+| search value_count >= 3

@@ -1,0 +1,25 @@
+title: Scheduled Task Created With schtasks.exe
+id: 9e2d4c61-3b7a-4f08-8c15-2d3e4f5a6b02
+status: experimental
+description: |
+  Detects a scheduled task being created from the command line, a common way to get code to run
+  again after a reboot or on a timer.
+references:
+  - https://attack.mitre.org/techniques/T1053/005/
+author: Shubhan Punde
+date: 2026-11-24
+tags:
+  - attack.persistence
+  - attack.execution
+  - attack.t1053.005
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    Image|endswith: '\schtasks.exe'
+    CommandLine|contains: '/create'
+  condition: selection
+falsepositives:
+  - Software updaters and admin scripts that create tasks; allowlist by task name and parent process
+level: medium

@@ -1,0 +1,24 @@
+title: Value Written to a Registry Run Key
+id: 7a3b5c18-2e9d-4b47-a6c2-4f5a6b7c8d04
+status: experimental
+description: |
+  Detects a new value under a Run or RunOnce key, which makes a program start every time the user logs on.
+references:
+  - https://attack.mitre.org/techniques/T1547/001/
+author: Shubhan Punde
+date: 2026-11-24
+tags:
+  - attack.persistence
+  - attack.t1547.001
+logsource:
+  category: registry_set
+  product: windows
+detection:
+  selection:
+    TargetObject|contains:
+      - '\Software\Microsoft\Windows\CurrentVersion\Run\'
+      - '\Software\Microsoft\Windows\CurrentVersion\RunOnce\'
+  condition: selection
+falsepositives:
+  - Legitimate software adding itself to startup during install
+level: medium

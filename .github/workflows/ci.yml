@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  detections:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Sigma, Wazuh and Splunk rules stay consistent
+        run: pytest -q
+
+  powershell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse and lint the simulation script
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile("$PWD/simulations/Invoke-LabSimulations.ps1", [ref]$null, [ref]$errors) | Out-Null
+          if ($errors.Count) { $errors | ForEach-Object { Write-Error $_.Message }; exit 1 }
+          Install-Module PSScriptAnalyzer -Force -Scope CurrentUser
+          $issues = Invoke-ScriptAnalyzer -Path simulations -Recurse -Severity Error,Warning -ExcludeRule PSAvoidUsingWriteHost
+          $issues | Format-Table -AutoSize
+          if ($issues | Where-Object Severity -eq 'Error') { exit 1 }
